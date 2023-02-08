@@ -119,19 +119,11 @@ public class Manager {
     }
 
     public List<Task> getTaskList(){
-        List<Task> taskList = new ArrayList<>();
-        for (Integer taskId : taskStorage.keySet()) {
-            taskList.add(taskStorage.get(taskId));
-        }
-        return taskList;
+        return new ArrayList<>(taskStorage.values());
     }
 
     public List<Epic> getEpics(){
-        List<Epic> epicList = new ArrayList<>();
-        for (Integer epicId : epicStorage.keySet()) {
-            epicList.add(epicStorage.get(epicId));
-        }
-        return epicList;
+        return new ArrayList<>(epicStorage.values());
     }
 
     public List<Subtask> getSubtasks(){
