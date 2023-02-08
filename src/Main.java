@@ -1,6 +1,6 @@
 import manager.Manager;
 import tasks.Epic;
-import manager.Status;
+import tasks.Status;
 import tasks.Subtask;
 
 public class Main {

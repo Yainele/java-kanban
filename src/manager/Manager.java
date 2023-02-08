@@ -1,6 +1,7 @@
 package manager;
 
 import tasks.Epic;
+import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
@@ -14,23 +15,23 @@ public class Manager {
     private final HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
     int id = 0;
 
-    private Integer generateID(){return  ++id;}
+    private Integer generateId(){return  ++id;}
 
     public void createTask(Task task){
-        task.setId(generateID());
+        task.setId(generateId());
         task.setStatus(Status.NEW);
         taskStorage.put(task.getId(),task);
     }
 
     public void createEpicTask(Epic epic){
-        epic.setId(generateID());
+        epic.setId(generateId());
         epicStorage.put(epic.getId(),epic);
 
     }
 
     public void createSubtask(Subtask subtask){
         Epic epic = epicStorage.get(subtask.getEpicId());
-        subtask.setId(generateID());
+        subtask.setId(generateId());
         subtask.setStatus(Status.NEW);
 
         subtaskStorage.put(subtask.getId(),subtask);
@@ -134,11 +135,7 @@ public class Manager {
     }
 
     public List<Subtask> getSubtasks(){
-        List<Subtask> subtaskList = new ArrayList<>();
-        for (Integer subtaskId : subtaskStorage.keySet()) {
-            subtaskList.add(subtaskStorage.get(subtaskId));
-        }
-        return subtaskList;
+        return new ArrayList<>(subtaskStorage.values());
     }
 
     public List<Subtask> getSubtasksByEpic(Integer id){
