@@ -1,27 +1,42 @@
+package tasks;
+
+import manager.Status;
+
 import java.util.ArrayList;
-public class Epic extends Task{
-    public Epic(String name, String description, Integer id) {
-        super(name, description,id);
+import java.util.List;
+
+public class Epic extends Task {
+    private List<Subtask> subtasksInEpic = new ArrayList<>();
+
+    public Epic(String name, String description) {
+        super(name, description);
     }
-    ArrayList<Subtask> subtasksInEpic = new ArrayList<>();
+
+    public List<Subtask> getSubtasksInEpic() {
+        return subtasksInEpic;
+    }
+
+    public void setSubtasksInEpic(List<Subtask> subtasksInEpic) {
+        this.subtasksInEpic = subtasksInEpic;
+    }
+
     public boolean isEpicDone(){
-        boolean isSubTasksDone = true;
 
         for (Subtask subtask : subtasksInEpic) {
             if(subtask.status != Status.DONE){
-                isSubTasksDone = false;
+                return false;
             }
         }
-        return isSubTasksDone;
+        return true;
     }
     public boolean isEpicNew(){
-        boolean isSubTasksNew = true;
+
         for (Subtask subtask : subtasksInEpic) {
             if(subtask.status != Status.NEW){
-                isSubTasksNew = false;
+                return false;
             }
         }
-        return isSubTasksNew;
+        return true;
     }
     @Override
     public Status getStatus() {
@@ -39,7 +54,7 @@ public class Epic extends Task{
     }
     @Override
     public String toString() {
-        return "Task{" +
+        return  "Task{" +
                 "id=" + getId() +
                 ", name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +

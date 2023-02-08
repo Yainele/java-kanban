@@ -1,40 +1,52 @@
+import manager.Manager;
+import tasks.Epic;
+import manager.Status;
+import tasks.Subtask;
+
 public class Main {
     public static void main(String[] args) {
         Manager manager = new Manager();
 
         Epic epic1 =
-                new Epic("Переезд","Переезд в другой город", manager.generateID());
+                new Epic("Переезд","Переезд в другой город");
         manager.createEpicTask(epic1);
 
         Subtask subtask1ForEpic1 =
-                new Subtask("Собрать коробки", Task.Status.NEW, manager.generateID());
+                new Subtask("Собрать коробки");
+        subtask1ForEpic1.setEpicId(epic1.getId());
         manager.createSubtask(subtask1ForEpic1);
 
         Subtask subtask2ForEpic1 =
-                new Subtask("Заказать перевозку вещей", Task.Status.NEW, manager.generateID());
+                new Subtask("Заказать перевозку вещей");
+        subtask2ForEpic1.setEpicId(epic1.getId());
         manager.createSubtask(subtask2ForEpic1);
 
         Epic epic2 =
-                new Epic("Приготовить обед","Приготовить блюдо на 4 человека", manager.generateID());
+                new Epic("Приготовить обед","Приготовить блюдо на 4 человека");
         manager.createEpicTask(epic2);
 
         Subtask subtask1ForEpic2 =
-                new Subtask("Купить овощи", Task.Status.NEW, manager.generateID());
+                new Subtask("Купить овощи");
+        subtask1ForEpic2.setEpicId(epic2.getId());
         manager.createSubtask(subtask1ForEpic2);
 
         Epic epicForReplace =
-                new Epic("Помыть машину", "Поехать на мойку", epic1.getId());
+                new Epic("Помыть машину", "Поехать на мойку");
+        epicForReplace.setId(epic1.getId());
 
         Subtask subtaskForReplace1 =
-                new Subtask("Купить машину", Task.Status.NEW, subtask1ForEpic1.getId());
+                new Subtask("Купить машину");
+        subtaskForReplace1.setEpicId(epicForReplace.getId());
+        subtaskForReplace1.setId(subtask1ForEpic1.getId());
 
 
         Subtask subtaskForReplace2 =
-                new Subtask("Заморать машину", Task.Status.NEW, subtask2ForEpic1.getId());
+                new Subtask("Заморать машину");
+        subtaskForReplace2.setEpicId(epicForReplace.getId());
+        subtaskForReplace2.setId(subtask2ForEpic1.getId());
 
-
-        System.out.println(manager.getEpicByID(1) + "\n");
-        System.out.println(manager.getEpicByID(4) + "\n");
+        System.out.println(manager.getEpicById(1) + "\n");
+        System.out.println(manager.getEpicById(4) + "\n");
 
         System.out.println("Обновление первого эпика: \n");
 
@@ -42,28 +54,28 @@ public class Main {
         manager.updateSubtask(subtaskForReplace1);
         manager.updateSubtask(subtaskForReplace2);
 
-        System.out.println(manager.getEpicByID(1) + "\n");
+        System.out.println(manager.getEpicById(1) + "\n");
 
-        manager.getSubTaskByID(2).setStatus(Task.Status.DONE);
-        manager.getSubTaskByID(3).setStatus(Task.Status.IN_PROGRESS);
+        manager.getSubTaskById(2).setStatus(Status.DONE);
+        manager.getSubTaskById(3).setStatus(Status.IN_PROGRESS);
 
-        manager.getSubTaskByID(5).setStatus(Task.Status.IN_PROGRESS);
+        manager.getSubTaskById(5).setStatus(Status.IN_PROGRESS);
 
         System.out.println("Обновление статусов всех задач: \n");
 
-        System.out.println(manager.getEpicByID(1) + "\n");
-        System.out.println(manager.getEpicByID(4) + "\n");
+        System.out.println(manager.getEpicById(1) + "\n");
+        System.out.println(manager.getEpicById(4) + "\n");
 
         System.out.println("Удаление подзадачи первого эпика: \n");
 
-        manager.removeSubTaskByID(3);
-        System.out.println(manager.getEpicByID(1) + "\n");
+        manager.removeSubTaskById(3);
+        System.out.println(manager.getEpicById(1) + "\n");
 
-        System.out.println("Удаление всех подзадач всех эпиков: \n");
 
         manager.removeAllSubtasks();
-        System.out.println(manager.getEpicByID(1) + "\n");
-        System.out.println(manager.getEpicByID(4));
+        System.out.println(manager.getEpicById(1) + "\n");
+        System.out.println(manager.getEpicById(4));
+
 
     }
 }
