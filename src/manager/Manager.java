@@ -13,8 +13,7 @@ public class Manager {
     private final HashMap<Integer, Task> taskStorage = new HashMap<>();
     private final HashMap<Integer, Epic> epicStorage = new HashMap<>();
     private final HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
-    int id = 0;
-
+    private int id = 0;
     private Integer generateId(){return  ++id;}
 
     public void createTask(Task task){
@@ -118,7 +117,7 @@ public class Manager {
         subtaskStorage.put(subtask.getId(),subtask);
     }
 
-    public List<Task> getTaskList(){
+    public List<Task> getTasks(){
         return new ArrayList<>(taskStorage.values());
     }
 
