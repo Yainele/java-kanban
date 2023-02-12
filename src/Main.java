@@ -12,13 +12,11 @@ public class Main {
         manager.createEpicTask(epic1);
 
         Subtask subtask1ForEpic1 =
-                new Subtask("Собрать коробки");
-        subtask1ForEpic1.setEpicId(epic1.getId());
+                new Subtask("Собрать коробки", epic1.getId());
         manager.createSubtask(subtask1ForEpic1);
 
         Subtask subtask2ForEpic1 =
-                new Subtask("Заказать перевозку вещей");
-        subtask2ForEpic1.setEpicId(epic1.getId());
+                new Subtask("Заказать перевозку вещей", epic1.getId());
         manager.createSubtask(subtask2ForEpic1);
 
         Epic epic2 =
@@ -26,8 +24,7 @@ public class Main {
         manager.createEpicTask(epic2);
 
         Subtask subtask1ForEpic2 =
-                new Subtask("Купить овощи");
-        subtask1ForEpic2.setEpicId(epic2.getId());
+                new Subtask("Купить овощи", epic2.getId());
         manager.createSubtask(subtask1ForEpic2);
 
         Epic epicForReplace =
@@ -35,14 +32,12 @@ public class Main {
         epicForReplace.setId(epic1.getId());
 
         Subtask subtaskForReplace1 =
-                new Subtask("Купить машину");
-        subtaskForReplace1.setEpicId(epicForReplace.getId());
+                new Subtask("Купить машину", epicForReplace.getId());
         subtaskForReplace1.setId(subtask1ForEpic1.getId());
 
 
         Subtask subtaskForReplace2 =
-                new Subtask("Заморать машину");
-        subtaskForReplace2.setEpicId(epicForReplace.getId());
+                new Subtask("Заморать машину", epicForReplace.getId());
         subtaskForReplace2.setId(subtask2ForEpic1.getId());
 
         System.out.println(manager.getEpicById(1) + "\n");
@@ -71,7 +66,7 @@ public class Main {
         manager.removeSubTaskById(3);
         System.out.println(manager.getEpicById(1) + "\n");
 
-
+        System.out.println("Удаление всех подзадач всех эпиков: \n");
         manager.removeAllSubtasks();
         System.out.println(manager.getEpicById(1) + "\n");
         System.out.println(manager.getEpicById(4));

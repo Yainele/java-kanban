@@ -13,25 +13,19 @@ public class Manager {
     private final HashMap<Integer, Task> taskStorage = new HashMap<>();
     private final HashMap<Integer, Epic> epicStorage = new HashMap<>();
     private final HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
-    private int id = 0;
-    private Integer generateId(){return  ++id;}
+
 
     public void createTask(Task task){
-        task.setId(generateId());
-        task.setStatus(Status.NEW);
         taskStorage.put(task.getId(),task);
     }
 
     public void createEpicTask(Epic epic){
-        epic.setId(generateId());
         epicStorage.put(epic.getId(),epic);
 
     }
 
     public void createSubtask(Subtask subtask){
         Epic epic = epicStorage.get(subtask.getEpicId());
-        subtask.setId(generateId());
-        subtask.setStatus(Status.NEW);
 
         subtaskStorage.put(subtask.getId(),subtask);
         epic.getSubtasksInEpic().add(subtask);
@@ -46,6 +40,8 @@ public class Manager {
     }
 
     public Epic getEpicById(int id) {
+        Epic epic = epicStorage.get(id);
+        updateStatus(epic);
         return epicStorage.get(id);
     }
 
@@ -75,7 +71,7 @@ public class Manager {
                 break;
             }
         }
-
+        updateStatus(epic);
         subtaskStorage.remove(id);
     }
 
@@ -91,8 +87,40 @@ public class Manager {
     public void removeAllSubtasks(){
         for (Epic epic : epicStorage.values()) {
             epic.getSubtasksInEpic().clear();
+            updateStatus(epic);
         }
         subtaskStorage.clear();
+
+    }
+
+    private void updateStatus(Epic epic){
+        boolean isEpicDone = true;
+        boolean isEpicNew = true;
+
+        for (Subtask subtask : epic.getSubtasksInEpic()) {
+            if(subtask.getStatus() != Status.DONE){
+                isEpicDone = false;
+                break;
+            }
+        }
+
+        for (Subtask subtask : epic.getSubtasksInEpic()) {
+            if(subtask.getStatus() != Status.NEW){
+                isEpicNew = false;
+                break;
+            }
+        }
+
+        if(epic.getSubtasksInEpic().isEmpty()){
+            epic.setStatus(Status.NEW);
+        } else if (isEpicNew) {
+            epic.setStatus(Status.NEW);
+        } else if (isEpicDone) {
+            epic.setStatus(Status.DONE);
+        }
+        else {
+            epic.setStatus(Status.IN_PROGRESS);
+        }
     }
 
     public void updateTask(Task task){
@@ -102,6 +130,7 @@ public class Manager {
     public void updateEpic(Epic epic){
         Epic oldEpic = epicStorage.get(epic.getId());
         epic.setSubtasksInEpic(oldEpic.getSubtasksInEpic());
+        updateStatus(epic);
         epicStorage.put(epic.getId(), epic);
     }
 
@@ -114,6 +143,7 @@ public class Manager {
                 break;
             }
         }
+        updateStatus(epic);
         subtaskStorage.put(subtask.getId(),subtask);
     }
 

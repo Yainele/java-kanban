@@ -1,19 +1,31 @@
 package tasks;
 
+import manager.Manager;
+
 public class Task {
     private final String name;
     private String description;
     private Integer id;
+    private static Integer generator = 0;
     protected Status status;
 
 
     public Task(String name, String description) {
+        this.id = generateId();
+        this.status = Status.NEW;
         this.name = name;
         this.description = description;
     }
 
     public Task(String name) {
+        this.id = generateId();
+        this.status = Status.NEW;
         this.name = name;
+    }
+
+    private Integer generateId(){
+        generator++;
+        return this.id = generator;
     }
 
     public Integer getId() {
