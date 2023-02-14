@@ -19,7 +19,7 @@ public class Epic extends Task {
     }
     @Override
     public String toString() {
-        return  "Task{" +
+        return  "EpicTask{" +
                 "id=" + getId() +
                 ", name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +

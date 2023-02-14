@@ -1,5 +1,7 @@
-package manager;
+package manager.taskManager;
 
+import manager.historyManager.HistoryManager;
+import manager.Managers;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -9,21 +11,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> taskStorage = new HashMap<>();
     private final HashMap<Integer, Epic> epicStorage = new HashMap<>();
     private final HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
 
+    HistoryManager historyManager = Managers.getDefaultHistory();
 
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+    @Override
     public void createTask(Task task){
         taskStorage.put(task.getId(),task);
     }
 
+    @Override
     public void createEpicTask(Epic epic){
         epicStorage.put(epic.getId(),epic);
-
     }
 
+    @Override
     public void createSubtask(Subtask subtask){
         Epic epic = epicStorage.get(subtask.getEpicId());
 
@@ -31,24 +40,32 @@ public class Manager {
         epic.getSubtasksInEpic().add(subtask);
     }
 
+    @Override
     public Task getTaskById(int id) {
+        historyManager.add(taskStorage.get(id));
         return taskStorage.get(id);
     }
 
+    @Override
     public Subtask getSubTaskById(int id) {
+        historyManager.add(subtaskStorage.get(id));
         return subtaskStorage.get(id);
     }
 
+    @Override
     public Epic getEpicById(int id) {
         Epic epic = epicStorage.get(id);
         updateStatus(epic);
+        historyManager.add(epicStorage.get(id));
         return epicStorage.get(id);
     }
 
+    @Override
     public void removeTaskById(int id) {
         taskStorage.remove(id);
     }
 
+    @Override
     public void removeEpicById(int id){
         Epic epic = epicStorage.get(id);
 
@@ -61,6 +78,7 @@ public class Manager {
         epicStorage.remove(id);
     }
 
+    @Override
     public void removeSubTaskById(int id){
         Subtask subtask = subtaskStorage.get(id);
         Epic epic = epicStorage.get(subtask.getEpicId());
@@ -75,15 +93,18 @@ public class Manager {
         subtaskStorage.remove(id);
     }
 
+    @Override
     public void removeAllTasks(){
         taskStorage.clear();
     }
 
+    @Override
     public void removeAllEpics(){
         epicStorage.clear();
         subtaskStorage.clear();
     }
 
+    @Override
     public void removeAllSubtasks(){
         for (Epic epic : epicStorage.values()) {
             epic.getSubtasksInEpic().clear();
@@ -92,7 +113,6 @@ public class Manager {
         subtaskStorage.clear();
 
     }
-
     private void updateStatus(Epic epic){
         boolean isEpicDone = true;
         boolean isEpicNew = true;
@@ -123,10 +143,12 @@ public class Manager {
         }
     }
 
+    @Override
     public void updateTask(Task task){
         taskStorage.put(task.getId(),task);
     }
 
+    @Override
     public void updateEpic(Epic epic){
         Epic oldEpic = epicStorage.get(epic.getId());
         epic.setSubtasksInEpic(oldEpic.getSubtasksInEpic());
@@ -134,6 +156,7 @@ public class Manager {
         epicStorage.put(epic.getId(), epic);
     }
 
+    @Override
     public void updateSubtask(Subtask subtask){
         Epic epic = epicStorage.get(subtask.getEpicId());
 
@@ -147,18 +170,20 @@ public class Manager {
         subtaskStorage.put(subtask.getId(),subtask);
     }
 
-    public List<Task> getTasks(){
-        return new ArrayList<>(taskStorage.values());
-    }
+    @Override
+    public List<Task> getTasks(){return new ArrayList<>(taskStorage.values());}
 
+    @Override
     public List<Epic> getEpics(){
         return new ArrayList<>(epicStorage.values());
     }
 
+    @Override
     public List<Subtask> getSubtasks(){
         return new ArrayList<>(subtaskStorage.values());
     }
 
+    @Override
     public List<Subtask> getSubtasksByEpic(Integer id){
         Epic epic = epicStorage.get(id);
         return epic.getSubtasksInEpic();
