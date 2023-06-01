@@ -8,31 +8,48 @@ public class Main {
 
         TaskManager taskManager = Managers.getDefault();
 
-        Epic firstEpic = new Epic("Написать java-kanban", "Сдача финального проекта 4");
+        Epic firstEpic = new Epic("Эпик 1", "Описание 1");
         taskManager.createEpicTask(firstEpic);
 
-        Subtask FirstSubtaskFor1Epic = new Subtask("Прочитать ТЗ", firstEpic.getId());
+        Subtask FirstSubtaskFor1Epic = new Subtask("Первая подзадача", firstEpic.getId());
         taskManager.createSubtask(FirstSubtaskFor1Epic);
 
-        Subtask SecondSubtaskFor1Epic = new Subtask("Выполнить ТЗ", firstEpic.getId());
+        Subtask SecondSubtaskFor1Epic = new Subtask("Вторая подзадача", firstEpic.getId());
         taskManager.createSubtask(SecondSubtaskFor1Epic);
 
-        //Проверка вместимости списка истории
-        //11
+        Subtask ThirdSubtaskFor1Epic = new Subtask("Третья подзадача", firstEpic.getId());
+        taskManager.createSubtask(ThirdSubtaskFor1Epic);
+
+        Epic SecondEpic = new Epic("Эпик 2", "Описание 2");
+        taskManager.createEpicTask(SecondEpic);
+
+
         taskManager.getEpicById(1);
-        //10
-        taskManager.getSubTaskById(3);
+
+
+        taskManager.getEpicById(SecondEpic.getId());
+
+
+        taskManager.getEpicById(1);
+
+
         taskManager.getSubTaskById(2);
-        taskManager.getEpicById(1);
-        taskManager.getEpicById(1);
-        taskManager.getSubTaskById(3);
-        taskManager.getSubTaskById(2);
-        taskManager.getEpicById(1);
-        taskManager.getEpicById(1);
-        taskManager.getSubTaskById(3);
+
+
         taskManager.getSubTaskById(3);
 
+
+        taskManager.getSubTaskById(ThirdSubtaskFor1Epic.getId());
+
+
+        taskManager.getSubTaskById(3);
+
+
+        taskManager.removeSubTaskById(2);
+
+        taskManager.removeEpicById(1);
         System.out.println(taskManager.getHistory());
+
 
     }
 }
