@@ -5,62 +5,67 @@ import tasks.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final HashMap<Integer, Node> history = new LinkedHashMap<>();
-    private Node head;
-    private Node tail;
+    class CustomLinkedList {
+        private Node head;
+        private Node tail;
 
-     void linkLast(Task task) {
-         final Node oldTail = tail;
-         final Node newNode = new Node(task,tail, null);
+        private void linkLast(Task task) {
+            final Node oldTail = tail;
+            final Node newNode = new Node(task,tail, null);
 
-          tail = newNode;
+            tail = newNode;
 
-         if (oldTail == null){
-             head = newNode;
-         }
-         else{
-             oldTail.next = newNode;
-         }
-     }
-
-    private void removeNode(Node node){
-        if (node.prev != null){
-            node.prev.next = node.next;
+            if (oldTail == null){
+                head = newNode;
+            }
+            else{
+                oldTail.next = newNode;
+            }
         }
 
-        if(node.next != null){
-            node.next.prev = node.prev;
+        private void removeNode(Node node){
+            if (node.prev != null){
+                node.prev.next = node.next;
+            }
+
+            if(node.next != null){
+                node.next.prev = node.prev;
+            }
+        }
+
+        private ArrayList<Task> getTasks(){
+            ArrayList<Task> tasksArray = new ArrayList<>();
+            for (Node node : history) {
+                tasksArray.add(node.data);
+            }
+            return tasksArray;
         }
     }
+    private final CustomLinkedList customLinkedList = new CustomLinkedList();
 
+    private final List<Node> history = new ArrayList<>();
+
+    private final HashMap<Integer, Node> assistantMap = new HashMap<>();
 
     @Override
     public void add(Task task) {
-        if(history.containsKey(task.getId())){
-            removeNode(history.get(task.getId()));
+        if(assistantMap.containsKey(task.getId())){
+            customLinkedList.removeNode(assistantMap.get(task.getId()));
             remove(task.getId());
         }
-        linkLast(task);
-        history.put(task.getId(),tail);
-
+        customLinkedList.linkLast(task);
+        history.add(customLinkedList.tail);
+        assistantMap.put(task.getId(), customLinkedList.tail);
     }
 
     @Override
     public void remove(int id) {
-           history.remove(id);
-    }
-
-    private ArrayList<Task> getTasks(){
-        ArrayList<Task> tasksArray = new ArrayList<>();
-        for (Node value : history.values()) {
-            tasksArray.add(value.data);
-        }
-        return tasksArray;
+           history.remove(assistantMap.get(id));
     }
 
     @Override
     public List<Task> getHistory() {
-        return getTasks();
+        return customLinkedList.getTasks();
     }
 
 }

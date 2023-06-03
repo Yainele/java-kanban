@@ -39,7 +39,7 @@ public class Main {
         taskManager.getSubTaskById(3);
 
 
-        taskManager.getSubTaskById(ThirdSubtaskFor1Epic.getId());
+        taskManager.getSubTaskById(4);
 
 
         taskManager.getSubTaskById(3);
@@ -47,7 +47,9 @@ public class Main {
 
         taskManager.removeSubTaskById(2);
 
+
         taskManager.removeEpicById(1);
+
         System.out.println(taskManager.getHistory());
 
 
