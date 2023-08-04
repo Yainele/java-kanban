@@ -1,5 +1,6 @@
 package manager.taskManager;
 
+import exceptions.ManagerSaveException;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -10,29 +11,29 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    void createTask(Task task);
+    void createTask(Task task) throws ManagerSaveException;
 
-    void createEpicTask(Epic epic);
+    void createEpicTask(Epic epic) throws ManagerSaveException;
 
-    void createSubtask(Subtask subtask);
+    void createSubtask(Subtask subtask) throws ManagerSaveException;
 
-    Task getTaskById(int id);
+    Task getTaskById(int id) throws ManagerSaveException;
 
-    Subtask getSubTaskById(int id);
+    Subtask getSubTaskById(int id) throws ManagerSaveException;
 
-    Epic getEpicById(int id);
+    Epic getEpicById(int id) throws ManagerSaveException;
 
-    void removeTaskById(int id);
+    void removeTaskById(int id) throws ManagerSaveException;
 
-    void removeEpicById(int id);
+    void removeEpicById(int id) throws ManagerSaveException;
 
-    void removeSubTaskById(int id);
+    void removeSubTaskById(int id) throws ManagerSaveException;
 
-    void removeAllTasks();
+    void removeAllTasks() throws ManagerSaveException;
 
-    void removeAllEpics();
+    void removeAllEpics() throws ManagerSaveException;
 
-    void removeAllSubtasks();
+    void removeAllSubtasks() throws ManagerSaveException;
 
     void updateTask(Task task);
 

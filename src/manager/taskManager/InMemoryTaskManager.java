@@ -1,5 +1,6 @@
 package manager.taskManager;
 
+import exceptions.ManagerSaveException;
 import manager.historyManager.HistoryManager;
 import manager.Managers;
 import tasks.Epic;
@@ -12,28 +13,44 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final HashMap<Integer, Task> taskStorage = new HashMap<>();
-    private final HashMap<Integer, Epic> epicStorage = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
+    protected final HashMap<Integer, Task> taskStorage = new HashMap<>();
+    protected final HashMap<Integer, Epic> epicStorage = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
 
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
+
+    public HashMap<Integer, Task> getTaskStorage(){
+        return taskStorage;
+    }
+
+    public HashMap<Integer, Epic> getEpicStorage(){
+        return epicStorage;
+    }
+
+    public HashMap<Integer, Subtask> getSubtaskStorage(){
+        return subtaskStorage;
+    }
+
+    public HistoryManager getHistoryManager(){
+        return historyManager;
+    }
 
     @Override
-    public List<Task> getHistory() {
+    public List<Task> getHistory(){
         return historyManager.getHistory();
     }
     @Override
-    public void createTask(Task task){
+    public void createTask(Task task) throws ManagerSaveException {
         taskStorage.put(task.getId(),task);
     }
 
     @Override
-    public void createEpicTask(Epic epic){
+    public void createEpicTask(Epic epic) throws ManagerSaveException {
         epicStorage.put(epic.getId(),epic);
     }
 
     @Override
-    public void createSubtask(Subtask subtask){
+    public void createSubtask(Subtask subtask) throws ManagerSaveException {
         Epic epic = epicStorage.get(subtask.getEpicId());
 
         subtaskStorage.put(subtask.getId(),subtask);
@@ -41,19 +58,19 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(int id) {
+    public Task getTaskById(int id) throws ManagerSaveException {
         historyManager.add(taskStorage.get(id));
         return taskStorage.get(id);
     }
 
     @Override
-    public Subtask getSubTaskById(int id) {
+    public Subtask getSubTaskById(int id) throws ManagerSaveException {
         historyManager.add(subtaskStorage.get(id));
         return subtaskStorage.get(id);
     }
 
     @Override
-    public Epic getEpicById(int id) {
+    public Epic getEpicById(int id) throws ManagerSaveException {
         Epic epic = epicStorage.get(id);
         updateStatus(epic);
         historyManager.add(epicStorage.get(id));
@@ -61,13 +78,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeTaskById(int id) {
+    public void removeTaskById(int id) throws ManagerSaveException {
         historyManager.remove(id);
         taskStorage.remove(id);
     }
 
     @Override
-    public void removeEpicById(int id){
+    public void removeEpicById(int id) throws ManagerSaveException {
         Epic epic = epicStorage.get(id);
 
         historyManager.remove(id);
@@ -82,7 +99,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeSubTaskById(int id){
+    public void removeSubTaskById(int id) throws ManagerSaveException {
         Subtask subtask = subtaskStorage.get(id);
         Epic epic = epicStorage.get(subtask.getEpicId());
         historyManager.remove(id);
@@ -98,18 +115,18 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeAllTasks(){
+    public void removeAllTasks() throws ManagerSaveException {
         taskStorage.clear();
     }
 
     @Override
-    public void removeAllEpics(){
+    public void removeAllEpics() throws ManagerSaveException {
         epicStorage.clear();
         subtaskStorage.clear();
     }
 
     @Override
-    public void removeAllSubtasks(){
+    public void removeAllSubtasks() throws ManagerSaveException {
         for (Epic epic : epicStorage.values()) {
             epic.getSubtasksInEpic().clear();
             updateStatus(epic);

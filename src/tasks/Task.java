@@ -6,18 +6,22 @@ public class Task {
     private Integer id;
     private static Integer generator = 0;
     protected Status status;
+    protected Type type;
 
 
-    public Task(String name, String description) {
+    public Task(String name, String description, Type type) {
         this.id = generateId();
         this.status = Status.NEW;
+        this.type = type;
         this.name = name;
         this.description = description;
+
     }
 
-    public Task(String name) {
+    public Task(String name, Type type) {
         this.id = generateId();
         this.status = Status.NEW;
+        this.type = type;
         this.name = name;
     }
 
@@ -51,6 +55,9 @@ public class Task {
             return Status.NEW;
         }
         return status;
+    }
+    public Type getType(){
+        return type;
     }
     @Override
     public String toString() {
