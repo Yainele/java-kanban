@@ -1,5 +1,7 @@
 package tasks;
 
+import java.util.Objects;
+
 public class Task {
     private final String name;
     private String description;
@@ -68,4 +70,26 @@ public class Task {
                 ", status=" + getStatus() +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id,
+                name,
+                description,
+                status, type);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // проверяем адреса объектов
+        if (obj == null) return false; // проверяем ссылку на null
+        if (this.getClass() != obj.getClass()) return false; // сравниваем классы
+        Task task = (Task) obj; // открываем доступ к полям другого объекта
+        return Objects.equals(name, task.name) && // проверяем все поля
+                Objects.equals(type, task.type) && // нужно логическое «и»
+                Objects.equals(description, task.description) &&
+                Objects.equals(status, task.status) &&
+                (Objects.equals(id, task.id));
+    }
+
 }
